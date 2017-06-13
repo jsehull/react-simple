@@ -29,8 +29,15 @@ class App extends React.Component {
 
         {/*return React.createElement('h1', null, 'hello Eggheads') // js of what the jsx does*/}
 
+        {/*statless*/}
         <h2>{this.state.widget}</h2>
         <TypingWidget update={this.update.bind(this)} />
+
+        <div>
+          <Button>I <Heart /> React</Button>
+        </div>
+
+        <Title text="123456" />
       </div>
     )
   }
@@ -48,5 +55,29 @@ App.defaultProps = {
 // stateless function component
 const TypingWidget = (props) =>
   <input type="text" onChange={props.update} />
+
+
+// props of nested children
+const Button = (props) => <button>{props.children}</button>
+
+class Heart extends React.Component {
+  render() {
+    return <span>&hearts;</span>
+  }
+}
+
+// custom validation beyond `.isRequired`
+const Title = (props) => <h1>Title: {props.text}</h1>
+
+Title.propTypes = {
+  text(props, propName, component) {
+    if (!(propName in props)) {
+      return new Error(`missing ${propName}`);
+    }
+    if(props[propName].length < 6) {
+      return new Error(`${propName} was too short`);
+    }
+  }
+}
 
 export default App
